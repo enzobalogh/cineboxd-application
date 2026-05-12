@@ -1,0 +1,31 @@
+Diagrama de sequência textual:
+
+Usuario
+  -> RecomendadorService: recomendar(usuario, topN)
+
+RecomendadorService
+  -> CatalogoFilmesAPI: buscarTodos()
+
+CatalogoFilmesAPI
+  -> RecomendadorService: lista de filmes
+
+RecomendadorService
+  -> FiltroFilmes: filtrar(perfil, catalogo)
+
+FiltroFilmes
+  -> RecomendadorService: filmes filtrados
+
+RecomendadorService
+  -> CalculadoraScore: calcular(perfil, filme)
+
+CalculadoraScore
+  -> RecomendadorService: score
+
+RecomendadorService
+  -> HistoricoUsuarioRepository: registrarRecomendacao(usuario, recomendacoes)
+
+RecomendadorService
+  -> NotificadorPush: enviar(usuario, mensagem)
+
+RecomendadorService
+  -> Usuario: lista de recomendações
