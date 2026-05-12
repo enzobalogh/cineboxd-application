@@ -1,0 +1,66 @@
+Diagrama de classes textual — CineBoxd:
+
+Usuario
+- nome
+- idade
+- PerfilCinefilo perfil
+
+PerfilCinefilo
+- pesosPorGenero
+- duracaoMinima
+- duracaoMaxima
+- classificacaoMaxima
+- idiomasAceitos
+- historicoAssistidos
+- notasPorFilme
+- notificacoesAtivas
++ setPesoGenero()
++ adicionarNota()
++ marcarComoAssistido()
++ jaAssistiu()
++ estaCompleto()
+
+Filme
+- id
+- titulo
+- ano
+- duracaoMinutos
+- generos
+- classificacaoEtaria
+- idioma
+- popularidade
+
+Recomendacao
+- Filme filme
+- double score
+- String justificativa
+
+RecomendadorService
+- CatalogoFilmesAPI catalogo
+- HistoricoUsuarioRepository historicoRepository
+- NotificadorPush notificadorPush
+- GeradorAleatorio geradorAleatorio
+- CalculadoraScore calculadoraScore
+- FiltroFilmes filtroFilmes
++ recomendar(usuario, topN)
++ recomendarAleatorio(usuario)
+
+FiltroFilmes
++ filtrar(perfil, catalogo)
+
+CalculadoraScore
++ calcular(perfil, filme)
++ calcularScoreGenero(perfil, filme)
++ calcularScoreDuracao(perfil, filme)
+
+CatalogoFilmesAPI
++ buscarTodos()
+
+HistoricoUsuarioRepository
++ registrarRecomendacao(usuario, recomendacoes)
+
+NotificadorPush
++ enviar(usuario, mensagem)
+
+GeradorAleatorio
++ sortearInteiro(minimoInclusivo, maximoExclusivo)
