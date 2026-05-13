@@ -54,6 +54,10 @@ public class CineBoxdApp {
 
         int duracaoMin = lerInteiro("Duracao minima (minutos): ");
         int duracaoMax = lerInteiro("Duracao maxima (minutos): ");
+        
+        if(duracaoMin>duracaoMax) {
+        	throw new DuracaoInvalidaException(nome);
+        }
 
         ClassificacaoEtaria classificacaoMax = lerClassificacaoEtaria();
         Set<Idioma> idiomas = lerIdiomas();
@@ -70,16 +74,21 @@ public class CineBoxdApp {
         }
 
         System.out.println("\n--- Pesos por Genero (0.0 a 1.0) ---");
-        for (Genero genero : Genero.values()) {
+        Genero[] generos = Genero.values();
+
+        for (int i = 0; i < generos.length; i++) {
+            Genero genero = generos[i];
+
             double peso = lerDouble("Peso para " + genero + ": ");
+
             try {
                 perfil.setPesoGenero(genero, peso);
             } catch (PesoInvalidoException e) {
-                System.out.println("Erro: " + e.getMessage() + ". Definindo como 0.0.");
+                System.out.println("Erro: " + e.getMessage() + ". Voltando...");
                 perfil.setPesoGenero(genero, 0.0);
+                i--;
             }
         }
-
         Usuario usuario = new Usuario(nome, idade, perfil);
         usuarios.add(usuario);
         System.out.println("\nUsuario \"" + nome + "\" cadastrado com sucesso!");
@@ -105,10 +114,15 @@ public class CineBoxdApp {
     }
 
     private static void recomendarFilmes() {
+    	Scanner sc = new Scanner(System.in);
         if (usuarios.isEmpty()) {
             System.out.println("Nenhum usuario cadastrado. Cadastre um usuario primeiro.");
             return;
         }
+        /*System.out.println("Deseja recomendação aleatória (s/n)?");
+        String choice = sc.nextLine();*/
+     
+        
 
         System.out.println("--- Recomendar Filmes ---");
         for (int i = 0; i < usuarios.size(); i++) {
@@ -129,7 +143,7 @@ public class CineBoxdApp {
         List<Recomendacao> recomendacoes;
 
         if (humor.isSurpresa()) {
-            Recomendacao aleatoria = service.recomendarAleatorio(usuario);
+            Recomendacao aleatoria = service.recomendarAleatorio(usuario, humor);
             if (aleatoria == null) {
                 System.out.println("Nenhuma recomendacao encontrada para " + usuario.getNome() + ".");
                 return;
@@ -206,6 +220,11 @@ public class CineBoxdApp {
         }
         return selecionados;
     }
+/*
+ * SURPRESA não deveria estar no enum de humores
+ * Já que não é um Humor é um  "modo"
+ * */
+    
 
     private static Humor lerHumor() {
         System.out.println("Qual seu humor hoje?");
